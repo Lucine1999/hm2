@@ -24,6 +24,18 @@ const grid2 = [
     [".", "2", ".", ".", "3", ".", ".", ".", "."],
 ];
 
+// const grid3 = [
+//     [".", ".", ".", ".", "2", ".", ".", "9", "."],
+//     [".", ".", ".", ".", "6", ".", ".", ".", "."],
+//     ["7", "1", ".", ".", "7", "5", ".", ".", "."],
+//     [".", "7", ".", ".", ".", ".", ".", ".", "."],
+//     [".", ".", ".", ".", "8", "3", ".", ".", "."],
+//     [".", ".", "8", ".", ".", "7", ".", "6", "."],
+//     [".", ".", ".", ".", ".", "2", ".", ".", "."],
+//     [".", "1", ".", "2", ".", ".", ".", ".", "."],
+//     [".", "2", ".", ".", "3", ".", ".", ".", "."],
+// ];
+
 function getIndex(row, column) {
     return row * 9 + column;
 }
@@ -91,7 +103,7 @@ function solveSudoku(mainGrid) {
         return false;
     }
     const result = {};
-    result["solvable"] = isSolvable(0);
+    result.solvable = isSolvable(0);
     result["matrix"] = mainGrid;
     return result;
 }
@@ -110,9 +122,63 @@ function solution(grid) {
         }
     }
 
-    const { solvable } = solveSudoku(mainGrid);
+    const { solvable,matrix } = solveSudoku(mainGrid);
+    console.log(matrix);
     return solvable;
 }
 
 console.log(solution(grid1)); // true
 console.log(solution(grid2)); // false
+// console.log(solution(grid3));
+
+
+
+let isValidSudoku = function (board) {
+    let rows = [];
+    let columns = [];
+    let boxes = [];
+
+    for (let i = 0; i < 9; i++) {
+        rows.push([]);
+        columns.push([]);
+        boxes.push([]);
+    }
+
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board.length; j++) {
+            let cell = board[i][j];
+
+            if (cell !== ".") {
+                if (rows[i].includes(cell)) {
+                    return false;
+                } else rows[i].push(cell);
+
+                if (columns[j].includes(cell)) {
+                    return false;
+                } else columns[j].push(cell);
+
+                let boxIndex = Math.floor(i / 3) * 3 + Math.floor(j / 3);
+
+                if (boxes[boxIndex].includes(cell)) {
+                    return false;
+                } else boxes[boxIndex].push(cell);
+            }
+        }
+    }
+
+    return true;
+};
+
+// let newGrid = [
+//     [".", "8", "7", "6", "5", "4", "3", "2", "1"],
+//     ["2", ".", ".", ".", ".", ".", ".", ".", "."],
+//     ["3", ".", ".", ".", ".", ".", ".", ".", "."],
+//     ["4", ".", ".", ".", ".", ".", ".", ".", "."],
+//     ["5", ".", ".", ".", ".", ".", ".", ".", "."],
+//     ["6", ".", ".", ".", ".", ".", ".", ".", "."],
+//     ["7", ".", ".", ".", ".", ".", ".", ".", "."],
+//     ["8", ".", ".", ".", ".", ".", ".", ".", "."],
+//     ["9", ".", ".", ".", ".", ".", ".", ".", "."],
+// ];
+
+// console.log("real solution", isValidSudoku(newGrid));
